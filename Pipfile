@@ -5,6 +5,11 @@ name = "pypi"
 
 [packages]
 django = "*"
+django-autoslug = "*"
+pillow = "*"
+django-ckeditor = "*"
+django-environ = "*"
+django-storages = "*"
 
 [dev-packages]
 

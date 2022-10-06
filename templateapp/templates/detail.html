@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {{text.title}}
+{% endblock title %}
+
+
+{% block content %}
+
+<div class="card mb-3">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img src="{{text.image.url}}" class="img-fluid rounded-start img" alt="...">
+        </div>
+        <div class="col-md-8">
+        <div class="card-body">
+            <h5 class="card-title">{{text.title}}</h5>
+            <p class="card-text">{{text.text|safe}}</p>
+            <p class="card-text"><small class="text-muted">
+                Last change: {{text.edit_date|timesince}} <br>
+                Author: {{text.creator.username}}
+            </small></p>
+            {% if request.user == text.creator %}
+              <a class="btn btn-primary mt-1 mb-3" href="{% url 'edit-article' slug=text.slug %}" >Edit</a>
+              <a class="btn btn-danger mt-1 mb-3" href="{% url 'delete-article' slug=text.slug %}" >Delete</a>
+            {% endif %}
+            
+        </div>
+        </div>
+    </div>
+</div>
+
+
+
+<h5>Comments</h5>
+
+{% if request.user.is_authenticated %}
+<form method="POST">
+    {% csrf_token %}
+    {{form|crispy}}
+    <input type="submit" class="btn btn-primary mt-3 mb-3" value="Send"/>
+</form>
+{% else %}
+<p>Login for write comment!</p>
+{% endif %}
+
+{% include 'components/message.html' %}
+
+{% for comment in comments %}
+<div class="card">
+    <div class="row">
+      <div class="col-md-4">
+       
+        {% if comment.writer.avatar %}
+            <img src="{{comment.writer.avatar.url}}" style="height: 130px; width: 185px" class="rounded-start" alt="...">
+        {% else %}
+            <img src="https://www.ktoeos.org/wp-content/uploads/2021/11/default-avatar.png" style="height: 130px; width: 185px" class="rounded-start" alt="...">
+        {% endif %} 
+
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+            <h5 class="card-title">{{comment.writer.username}}</h5>
+          <p class="card-text">{{comment.comment}}</p>
+          <p class="card-text"><small class="text-muted">
+            {{comment.edit_date}}
+        </small></p>
+        </div>
+        {% if request.user == comment.writer or request.user == text.creator %}
+            <p>
+                <a class="btn btn-danger" href="{% url 'delete-comment' id=comment.id %}">Delete Your Comment</a>
+            </p>
+        {% endif %}
+        
+      </div>
+    </div>
+</div>
+
+{% empty %}
+<p>Write the first Comment!</p>
+
+{% endfor %}
+    
+
+
+{% endblock content %}
+    
+    
