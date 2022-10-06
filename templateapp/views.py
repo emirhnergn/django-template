@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from models import TextModel
-from forms import AddCommentForm
+from .models import TextModel, CategoryModel
+from .forms import AddCommentForm
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.views import View
 from django.contrib import messages
+from django.views.generic import ListView
 import logging
 
 def home(request):
@@ -51,4 +52,13 @@ class DetailView(View):
             comment.save()
             messages.success(request, 'Comment shared successfully')
         return redirect('detail', slug=slug)
-
+class CategoryListView(ListView):
+    template_name = 'pages/category.html'
+    context_object_name =  'texts'
+    paginate_by =  2
+    
+    def get_queryset(self):
+        categories = get_object_or_404(CategoryModel, slug=self.kwargs['categorySlug'])
+        return categories.text.all().order_by('-edit_date')
+    
+    

@@ -6,7 +6,8 @@ import environ
 
 env = environ.Env()
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
 
@@ -17,8 +18,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'account',
     'templateapp',
-    'storages'
+    #third party
+    'ckeditor',
+    'crispy_forms',
+    'storages',
 ]
 
 MIDDLEWARE = [

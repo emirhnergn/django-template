@@ -36,8 +36,7 @@ class CommentModel(DateAbstarctModel):
     writer = models.ForeignKey('account.CustomUserModel', on_delete=models.CASCADE, related_name='comment')
     text = models.ForeignKey(TextModel, on_delete=models.CASCADE, related_name='comments')
     comment = models.TextField(blank=False, null=False)
-
-    
+ 
     class Meta:
         db_table = 'comment'
         verbose_name_plural = 'Comments'

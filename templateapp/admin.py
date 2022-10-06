@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import CategoryModel, TextModel, CommentModel
+from .models import CategoryModel, TextModel, CommentModel
 
 admin.site.register(CategoryModel)
 

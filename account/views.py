@@ -1,3 +1,11 @@
-from django.shortcuts import render
+from django.views.generic import DetailView
+from account.models import CustomUserModel
+from django.shortcuts import get_object_or_404
 
-# Create your views here.
+class ProfileDetailView(DetailView):
+    template_name = 'pages/profile.html'
+    context_object_name = 'profile'
+    
+    def get_object(self):
+        profile = get_object_or_404(CustomUserModel, username=self.kwargs['username'])
+        return profile
